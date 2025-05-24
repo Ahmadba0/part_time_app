@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:parttime/controller/login_controller%20.dart';
 import 'package:parttime/views/Auth/signup.dart';
 import 'package:parttime/views/Auth/widgets/custom_button.dart';
 import 'package:parttime/views/Auth/widgets/custom_checkbox.dart';
@@ -13,6 +14,7 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LoginController controller = Get.put(LoginController());
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -23,49 +25,52 @@ class Login extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: ListView(
-          padding: EdgeInsets.only(
-            right: MediaQuery.sizeOf(context).width * 0.05,
-            left: MediaQuery.sizeOf(context).width * 0.05,
-            top: MediaQuery.sizeOf(context).height * 0.117,
-          ),
-          children: [
-            CustomLoginHeader(),
-            SizedBox(height: 56.h),
-            Form(
-              child: Column(
-                children: [
-                  CustomTextfield(
-                    hint: "User name",
-                    controller: TextEditingController(),
-                  ),
-                  SizedBox(height: 30.h),
-                  CustomTextfield(
-                    hint: "Password",
-                    controller: TextEditingController(),
-                  ),
-                  CustomCheckbox(value: false),
-
-                  CustomButton(
-                    text: "Sign in",
-                    onTap: () {
-                      Get.offAll(() => HomeView());
-                    },
-                  ),
-                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.09),
-                  GestureDetector(
-                    onTap: () {
-                      Get.offAll(() => Signup());
-                    },
-                    child: Text(
-                      "Don't have an account? Signup!",
-                      style: TextStyle(color: Colors.white, fontSize: 14.sp),
-                    ),
-                  ),
-                ],
-              ),
+        child: Form(
+          key: controller.formstate,
+          child: ListView(
+            padding: EdgeInsets.only(
+              right: MediaQuery.sizeOf(context).width * 0.05,
+              left: MediaQuery.sizeOf(context).width * 0.05,
+              top: MediaQuery.sizeOf(context).height * 0.117,
             ),
-          ],
+            children: [
+              CustomLoginHeader(),
+              SizedBox(height: 56.h),
+              Form(
+                child: Column(
+                  children: [
+                    CustomTextfield(
+                      hint: "User name",
+                      controller: controller.usernameController!,
+                    ),
+                    SizedBox(height: 30.h),
+                    CustomTextfield(
+                      hint: "Password",
+                      controller: controller.passowrdController!,
+                    ),
+                    CustomCheckbox(value: false),
+
+                    CustomButton(
+                      text: "Sign in",
+                      onTap: () {
+                        controller.login();
+                      },
+                    ),
+                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.09),
+                    GestureDetector(
+                      onTap: () {
+                        Get.offAll(() => Signup());
+                      },
+                      child: Text(
+                        "Don't have an account? Signup!",
+                        style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
